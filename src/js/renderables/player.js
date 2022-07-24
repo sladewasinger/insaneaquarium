@@ -7,7 +7,10 @@ class PlayerEntity extends Entity {
      */
     constructor(x, y, settings) {
         // call the parent constructor
-        super(x, y , settings);
+        super(x, y, settings);
+        this.color = settings.color;
+        this.body.setMaxVelocity(0, 0);
+        console.log("POS: ", x, y);
     }
 
     /**
@@ -20,14 +23,20 @@ class PlayerEntity extends Entity {
         return super.update(dt);
     }
 
-   /**
-     * colision handler
-     * (called when colliding with other objects)
-     */
+    /**
+      * colision handler
+      * (called when colliding with other objects)
+      */
     onCollision(response, other) {
         // Make all other objects solid
         return true;
     }
+
+    draw(renderer) {
+        renderer.setColor(this.color);
+        renderer.fillRect(this.pos.x, this.pos.y, this.width, this.height);
+    }
 };
+
 
 export default PlayerEntity;
