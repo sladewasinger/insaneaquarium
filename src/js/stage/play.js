@@ -22,7 +22,7 @@ class PlayScreen extends Stage {
             {
                 width: this.boundingRect.max.x - 20,
                 height: this.boundingRect.max.y - 20,
-                color: "#f00",
+                color: "#aaf",
                 shape: "rect"
             });
         game.world.addChild(tank, 1);

@@ -1,4 +1,4 @@
-import { Entity, Renderable, Vector2d } from 'melonjs/dist/melonjs.module.js';
+import { Entity, Renderable, Vector2d, input, Text } from 'melonjs/dist/melonjs.module.js';
 
 class FishEntity extends Renderable {
 
@@ -8,9 +8,10 @@ class FishEntity extends Renderable {
     constructor(x, y, width, height, color, boundingRect) {
         // call the parent constructor
         super(x, y);
+        this.pos = new Vector2d(x, y);
         this.x = x;
         this.y = y;
-        this.maxSpeed = 2;
+        this.maxSpeed = 3;
         this.width = width;
         this.height = height;
         this.color = color;
@@ -21,19 +22,49 @@ class FishEntity extends Renderable {
     }
 
     randomizeTargetPos() {
-        this.targetPos = new Vector2d(Math.random() * (this.boundingRect.max.x - 100) + 50, Math.random() * (this.boundingRect.max.y - 100) + 50);
+        const randomPos = new Vector2d(
+            Math.floor(1000 * Math.random() - 500),
+            Math.floor(1000 * Math.random() - 500));
+
+        this.targetPos = this.pos
+            .clone()
+            .add(randomPos);
+
+        if (this.targetPos.x >= this.boundingRect.max.x - this.width / 2) {
+            this.targetPos.x = this.boundingRect.max.x - this.width / 2;
+        }
+        if (this.targetPos.y >= this.boundingRect.max.y - this.height / 2) {
+            this.targetPos.y = this.boundingRect.max.y - this.height / 2;
+        }
+        if (this.targetPos.x < 0 + this.width / 2) {
+            this.targetPos.x = 0 + this.width / 2;
+        }
+        if (this.targetPos.y < 0 + this.height / 2) {
+            this.targetPos.y = 0 + this.height / 2;
+        }
     }
 
     /**
      * update the entity
      */
     update(dt) {
-        const movement = this.targetPos
+        const dist = this.pos.distance(this.targetPos);
+
+        let movement = this.targetPos
             .clone()
             .sub(this.pos)
-            .scale(0.01)
-            .clamp(-this.maxSpeed, this.maxSpeed);
-        if (this.pos.clone().distance(this.targetPos) <= 10) {
+            .normalize()
+            .scale(this.maxSpeed);
+
+        if (dist < this.width * 5) {
+            movement = this.targetPos
+                .clone()
+                .sub(this.pos)
+                .scale(0.03)
+                .clamp(-this.maxSpeed, this.maxSpeed);
+        }
+
+        if (dist <= 15) {
             if (!this.targetReached) {
                 this.targetReached = true;
                 setTimeout(() => {
@@ -46,16 +77,16 @@ class FishEntity extends Renderable {
         }
 
         if (this.pos.x >= this.boundingRect.max.x - this.width / 2) {
-            this.pos.x = this.boundingRect.max.x - this.width;
+            this.pos.x = this.boundingRect.max.x - this.width / 2;
         }
         if (this.pos.y >= this.boundingRect.max.y - this.height / 2) {
-            this.pos.y = this.boundingRect.max.y - this.height;
+            this.pos.y = this.boundingRect.max.y - this.height / 2;
         }
-        if (this.pos.x < 0) {
-            this.pos.x = 0;
+        if (this.pos.x < 0 + this.width / 2) {
+            this.pos.x = 0 + this.width / 2;
         }
-        if (this.pos.y < 0) {
-            this.pos.y = 0;
+        if (this.pos.y < 0 + this.height / 2) {
+            this.pos.y = 0 + this.height / 2;
         }
 
 
@@ -75,8 +106,10 @@ class FishEntity extends Renderable {
     draw(renderer) {
         renderer.setColor(this.color);
         renderer.fillRect(this.pos.x - this.width / 2, this.pos.y - this.height / 2, this.width, this.height);
-        renderer.setColor("#000");
-        renderer.fillRect(this.targetPos.x, this.targetPos.y, 10, 10);
+        // renderer.setColor("#000");
+        // renderer.fillRect(this.targetPos.x, this.targetPos.y, 10, 10);
+        // var font = new Text(100, 100, { font: "Arial", size: 16, fillStyle: "#000", text: "TANK" });
+        // font.draw(renderer, `${this.targetPos.x.toFixed(0)}, ${this.targetPos.x.toFixed(0)} `, this.targetPos.x - 40, this.targetPos.y - 20);
     }
 };
 

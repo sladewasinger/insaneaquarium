@@ -1,4 +1,4 @@
-import { Entity, Vector2d } from 'melonjs/dist/melonjs.module.js';
+import { Entity, Vector2d, Text, input } from 'melonjs/dist/melonjs.module.js';
 
 class TankEntity extends Entity {
 
@@ -9,6 +9,10 @@ class TankEntity extends Entity {
         // call the parent constructor
         super(x, y, settings);
         this.color = settings.color;
+        input.registerPointerEvent('pointermove', this, this.setPointerPos.bind(this));
+    }
+
+    setPointerPos(pointer) {
     }
 
     /**
@@ -31,6 +35,10 @@ class TankEntity extends Entity {
     draw(renderer) {
         renderer.setColor(this.color);
         renderer.fillRect(this.pos.x, this.pos.y, this.width, this.height);
+
+        renderer.setColor("#000");
+        var font = new Text(100, 100, { font: "Arial", size: 24, fillStyle: "#000", text: "TANK" });
+        font.draw(renderer, `${input.pointer.gameLocalX}, ${input.pointer.gameLocalY}`, 100, 100);
     }
 };
 
