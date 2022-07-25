@@ -16,7 +16,7 @@ class FishEntity extends Sprite {
         this.pos = new Vector2d(x, y);
         this.x = x;
         this.y = y;
-        this.maxSpeed = 3;
+        this.maxSpeed = 2;
         this.width = width;
         this.height = height;
         this.color = color;
@@ -35,17 +35,17 @@ class FishEntity extends Sprite {
             .clone()
             .add(randomPos);
 
-        if (this.targetPos.x >= this.boundingRect.max.x - this.width / 2) {
-            this.targetPos.x = this.boundingRect.max.x - this.width / 2;
+        if (this.targetPos.x >= this.boundingRect.max.x - this.width / 2 - 50) {
+            this.targetPos.x = this.boundingRect.max.x - this.width / 2 - 50;
         }
-        if (this.targetPos.y >= this.boundingRect.max.y - this.height / 2) {
-            this.targetPos.y = this.boundingRect.max.y - this.height / 2;
+        if (this.targetPos.y >= this.boundingRect.max.y - this.height / 2 - 50) {
+            this.targetPos.y = this.boundingRect.max.y - this.height / 2 - 50;
         }
-        if (this.targetPos.x < 0 + this.width / 2) {
-            this.targetPos.x = 0 + this.width / 2;
+        if (this.targetPos.x < 0 + this.width / 2 + 50) {
+            this.targetPos.x = 0 + this.width / 2 + 50;
         }
-        if (this.targetPos.y < 0 + this.height / 2) {
-            this.targetPos.y = 0 + this.height / 2;
+        if (this.targetPos.y < 0 + this.height / 2 + 50) {
+            this.targetPos.y = 0 + this.height / 2 + 50;
         }
     }
 
@@ -61,7 +61,7 @@ class FishEntity extends Sprite {
             .normalize()
             .scale(this.maxSpeed);
 
-        if (dist < this.width * 5) {
+        if (dist < this.width * 3) {
             movement = this.targetPos
                 .clone()
                 .sub(this.pos)
@@ -75,7 +75,7 @@ class FishEntity extends Sprite {
                 setTimeout(() => {
                     this.targetReached = false;
                     this.randomizeTargetPos()
-                }, 3000 * Math.random() + 500);
+                }, 3000 * Math.random() + 250);
             }
         } else {
             this.pos.add(movement);
