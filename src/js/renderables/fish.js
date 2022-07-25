@@ -1,13 +1,18 @@
-import { Entity, Renderable, Vector2d, input, Text } from 'melonjs/dist/melonjs.module.js';
+import { Entity, Renderable, Vector2d, input, Text, Sprite, loader } from 'melonjs/dist/melonjs.module.js';
 
-class FishEntity extends Renderable {
+class FishEntity extends Sprite {
 
     /**
      * constructor
      */
     constructor(x, y, width, height, color, boundingRect) {
         // call the parent constructor
-        super(x, y);
+        const image = loader.getImage('fish');
+        super(x, y, {
+            width: width,
+            height: height,
+            image: image
+        })
         this.pos = new Vector2d(x, y);
         this.x = x;
         this.y = y;
@@ -103,14 +108,14 @@ class FishEntity extends Renderable {
         return false;
     }
 
-    draw(renderer) {
-        renderer.setColor(this.color);
-        renderer.fillRect(this.pos.x - this.width / 2, this.pos.y - this.height / 2, this.width, this.height);
-        // renderer.setColor("#000");
-        // renderer.fillRect(this.targetPos.x, this.targetPos.y, 10, 10);
-        // var font = new Text(100, 100, { font: "Arial", size: 16, fillStyle: "#000", text: "TANK" });
-        // font.draw(renderer, `${this.targetPos.x.toFixed(0)}, ${this.targetPos.x.toFixed(0)} `, this.targetPos.x - 40, this.targetPos.y - 20);
-    }
+    // draw(renderer) {
+    //     renderer.setColor(this.color);
+    //     renderer.fillRect(this.pos.x - this.width / 2, this.pos.y - this.height / 2, this.width, this.height);
+    //     // renderer.setColor("#000");
+    //     // renderer.fillRect(this.targetPos.x, this.targetPos.y, 10, 10);
+    //     // var font = new Text(100, 100, { font: "Arial", size: 16, fillStyle: "#000", text: "TANK" });
+    //     // font.draw(renderer, `${this.targetPos.x.toFixed(0)}, ${this.targetPos.x.toFixed(0)} `, this.targetPos.x - 40, this.targetPos.y - 20);
+    // }
 };
 
 
