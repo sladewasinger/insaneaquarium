@@ -1,30 +1,44 @@
-import { Stage, game, ColorLayer, BitmapText } from 'melonjs/dist/melonjs.module.js';
-import PlayerEntity from "../renderables/player.js";
+import { Stage, game, ColorLayer, BitmapText, Vector2d, Renderer } from 'melonjs/dist/melonjs.module.js';
+import * as me from 'melonjs/dist/melonjs.module.js';
+import FishEntity from "../renderables/fish.js";
+import TankEntity from '../renderables/tank.js';
 
 class PlayScreen extends Stage {
     /**
      *  action to perform on state change
      */
     onResetEvent() {
-        // add a gray background to the default Stage
-        // game.world.addChild(new ColorLayer("background", "#202020"));
+        game.world.gravity = new Vector2d(0, 0);
 
-        // // add a font text display object
-        // game.world.addChild(new BitmapText(game.viewport.width / 2, game.viewport.height / 2, {
-        //     font: "PressStart2P",
-        //     size: 4.0,
-        //     textBaseline: "middle",
-        //     textAlign: "center",
-        //     text: "Hello World !"
-        // }));
+        this.fishes = [];
+        this.startingFish = 10;
+        this.boundingRect = game.viewport.getBounds();
 
-        this.player = new PlayerEntity(50, 50, {
-            width: 50,
-            height: 50,
-            color: "#f00",
-            shape: "rect"
-        });
-        game.world.addChild(this.player, 1);
+        game.world.addChild(new ColorLayer('background', '#013'), 0);
+
+        const tank = new TankEntity(
+            5,
+            5,
+            {
+                width: this.boundingRect.max.x - 20,
+                height: this.boundingRect.max.y - 20,
+                color: "#f00",
+                shape: "rect"
+            });
+        game.world.addChild(tank, 1);
+
+        console.log(game.viewport);
+        for (var i = 0; i < this.startingFish; i++) {
+            const fish = new FishEntity(
+                this.boundingRect.max.x * Math.random(),
+                this.boundingRect.max.y * Math.random(),
+                50,
+                50,
+                "#0ff",
+                this.boundingRect);
+            this.fishes.push(fish);
+            game.world.addChild(fish, 2 + i);
+        }
     }
 };
 
